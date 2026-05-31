@@ -1,1 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cregar Family Lists</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12131A;
+    --paper: #F7F4EF;
+    --cream: #EDE9E1;
+    --gold: #C9962B;
+    --gold-light: #F0D080;
+    --muted: #888070;
+    --card-shadow: 0 4px 24px rgba(18,19,26,0.10);
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 72px 24px 56px;
+    text-align: center;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    margin-bottom: 20px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .monogram span {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -1px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 8vw, 64px);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    animation: fadeDown 0.6s 0.1s ease both;
+    opacity: 0;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  header p.sub {
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    animation: fadeDown 0.6s 0.2s ease both;
+    opacity: 0;
+  }
+
+  /* ── MAIN ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  /* ── TRIP SECTION ── */
+  .trip-section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.5s ease both;
+    opacity: 0;
+  }
+
+  .trip-section:nth-child(1) { animation-delay: 0.3s; }
+  .trip-section:nth-child(2) { animation-delay: 0.45s; }
+  .trip-section:nth-child(3) { animation-delay: 0.6s; }
+
+  .trip-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--cream);
+  }
+
+  .trip-icon { font-size: 24px; }
+
+  .trip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .trip-date {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--cream);
+    padding: 4px 10px;
+    border-radius: 99px;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 14px;
+  }
+
+  .list-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 22px 18px 18px;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid transparent;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .list-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .list-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--cream);
+    box-shadow: 0 10px 36px rgba(18,19,26,0.13);
+  }
+
+  .list-card:hover::before { transform: scaleX(1); }
+
+  .card-emoji { font-size: 28px; line-height: 1; }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .card-arrow {
+    margin-top: auto;
+    font-size: 18px;
+    color: var(--card-accent, var(--gold));
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .list-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ── FUTURE PLACEHOLDER ── */
+  .placeholder-card {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 22px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border: 1.5px dashed #C8C0B0;
+    opacity: 0.55;
+  }
+
+  .placeholder-card .card-name {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--cream);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cregar <em>Family</em><br>Lists</h1>
+  <p class="sub">Packing lists &amp; more — one place for every trip</p>
+</header>
+
+<main>
+
+  <!-- ── FLORIDA 2026 ── -->
+  <section class="trip-section">
+    <div class="trip-header">
+      <span class="trip-icon">🌴</span>
+      <span class="trip-title">Florida Road Trip</span>
+      <span class="trip-date">Summer 2026</span>
+    </div>
+    <div class="card-grid">
+
+      <a class="list-card" href="florida-packing-damian.html" style="--card-accent:#0077B6">
+        <span class="card-emoji">🌴</span>
+        <span class="card-name">Damian</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="list-card" href="florida-packing-audrey.html" style="--card-accent:#7C3AED">
+        <span class="card-emoji">✨</span>
+        <span class="card-name">Audrey</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="list-card" href="florida-packing-justin.html" style="--card-accent:#F5A623">
+        <span class="card-emoji">🏄</span>
+        <span class="card-name">Justin</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="list-card" href="florida-packing-bethany.html" style="--card-accent:#00B4D8">
+        <span class="card-emoji">🌊</span>
+        <span class="card-name">Bethany</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="list-card" href="florida-packing-maddy.html" style="--card-accent:#FF6B9D">
+        <span class="card-emoji">🌺</span>
+        <span class="card-name">Maddy</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a class="list-card" href="florida-packing-amy.html" style="--card-accent:#2D9E6B">
+        <span class="card-emoji">🌸</span>
+        <span class="card-name">Amy</span>
+        <span class="card-label">Packing list</span>
+        <span class="card-arrow">→</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── FUTURE TRIPS (placeholder) ── -->
+  <section class="trip-section">
+    <div class="trip-header">
+      <span class="trip-icon">🗺️</span>
+      <span class="trip-title">More Trips</span>
+      <span class="trip-date">Coming soon</span>
+    </div>
+    <div class="card-grid">
+      <div class="placeholder-card">
+        <span class="card-emoji" style="opacity:0.4">📋</span>
+        <span class="card-name">Next adventure here</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>cregar.net/lists &nbsp;·&nbsp; Cregar Family</footer>
+
+</body>
+</html>
