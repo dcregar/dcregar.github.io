@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damian's Florida Packing List</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#0077B6;--bg:#F0F8FF;--text:#1A1A2E;--muted:#999;--card:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+.header{background:linear-gradient(135deg,#0077B6 0%,#023E8A 100%);padding:44px 24px 72px;position:relative;overflow:hidden;text-align:center;}
+.header::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.08);}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:48px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%);}
+.kid-emoji{font-size:52px;display:block;margin-bottom:6px;position:relative;z-index:1;animation:bob 3s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(30px,9vw,52px);font-weight:900;color:#fff;position:relative;z-index:1;line-height:1.1;}
+.header .tagline{color:rgba(255,255,255,0.8);font-size:14px;margin-top:6px;font-weight:300;position:relative;z-index:1;}
+.progress-wrap{max-width:560px;margin:22px auto 0;padding:0 24px;position:relative;z-index:1;}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:rgba(255,255,255,0.85);margin-bottom:6px;}
+.progress-bar{height:8px;background:rgba(255,255,255,0.25);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:rgba(255,255,255,0.9);border-radius:99px;transition:width 0.4s ease;width:0%;}
+.content{max-width:580px;margin:0 auto;padding:24px 16px 0;}
+.controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.btn{flex:1;min-width:100px;padding:11px 14px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+.btn-accent{background:var(--accent);color:#fff;}
+.btn-accent:hover{opacity:0.88;}
+.btn-outline{background:#fff;color:var(--text);border:1.5px solid #E0E0E0;}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.category{background:var(--card);border-radius:18px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);border-left:4px solid var(--accent);}
+.cat-header{display:flex;align-items:center;padding:15px 18px;cursor:pointer;user-select:none;gap:11px;}
+.cat-emoji{font-size:22px;flex-shrink:0;}
+.cat-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;flex:1;}
+.cat-count{font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--bg);color:var(--muted);}
+.cat-toggle{font-size:14px;color:var(--muted);transition:transform 0.25s;flex-shrink:0;}
+.category.open .cat-toggle{transform:rotate(180deg);}
+.cat-items{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+.category.open .cat-items{max-height:2000px;}
+.item{display:flex;align-items:center;padding:10px 14px;gap:10px;border-top:1px solid #F2F2F2;transition:background 0.15s;}
+.item:hover{background:#FAFAFA;}
+.item.checked{opacity:0.4;}
+.item.checked .item-label{text-decoration:line-through;color:var(--muted);}
+.checkbox{width:22px;height:22px;border-radius:6px;border:2px solid #DDD;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:13px;color:#fff;cursor:pointer;}
+.item.checked .checkbox{background:var(--accent);border-color:var(--accent);}
+.item-label{font-size:14px;flex:1;cursor:pointer;}
+.item-note{font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--bg);color:var(--accent);flex-shrink:0;}
+.del-btn{background:none;border:none;cursor:pointer;color:#CCC;font-size:16px;padding:2px 5px;border-radius:6px;flex-shrink:0;line-height:1;transition:color 0.15s,background 0.15s;}
+.del-btn:hover{color:#E53935;background:#FFF0F0;}
+.add-row{border-top:1px solid #F2F2F2;padding:10px 14px;display:flex;gap:8px;align-items:center;}
+.add-input{flex:1;border:1.5px solid #E0E0E0;border-radius:9px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;background:#FAFAFA;}
+.add-input:focus{border-color:var(--accent);background:#fff;}
+.qty-input{width:52px;border:1.5px solid #E0E0E0;border-radius:9px;padding:7px 8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;transition:border-color 0.2s;background:#FAFAFA;}
+.qty-input:focus{border-color:var(--accent);background:#fff;}
+.qty-label{font-size:11px;color:var(--muted);white-space:nowrap;}
+.add-btn{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;}
+.add-btn:hover{opacity:0.85;}
+.done-banner{display:none;text-align:center;padding:18px;background:var(--card);border-radius:18px;margin-bottom:16px;border:2px dashed var(--accent);font-family:'Playfair Display',serif;font-size:22px;color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="kid-emoji">🌴</span>
+  <h1>Damian's Packing List</h1>
+  <p class="tagline">The driver. The hero. The dad.</p>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>All packed ✈️</span><span id="pt">0 of 0</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+  </div>
+</div>
+<div class="content">
+  <div class="done-banner" id="db">🎉 You're all packed, Damian! Florida, here we come!</div>
+  <div class="controls">
+    <button class="btn btn-outline" onclick="expandAll()">Expand All</button>
+    <button class="btn btn-outline" onclick="collapseAll()">Collapse All</button>
+    <button class="btn btn-accent" onclick="resetAll()">Reset</button>
+  </div>
+  <div id="lists"></div>
+</div>
+<script>
+const SK='florida_damian_v2';
+const DD=[{"emoji": "\ud83d\udc57", "title": "Clothing", "items": [{"label": "T-shirts / tank tops", "note": "x7"}, {"label": "Shorts", "note": "x4"}, {"label": "Swimsuit", "note": "x2"}, {"label": "Lightweight pants or jeans", "note": "x1"}, {"label": "Underwear", "note": "x8"}, {"label": "Socks (light / no-show)", "note": "x5"}, {"label": "Pajamas", "note": ""}, {"label": "Light hoodie or cardigan", "note": "AC is cold!"}, {"label": "Rain jacket or poncho", "note": "Florida showers"}, {"label": "Sun hat or baseball cap", "note": ""}, {"label": "Sunglasses", "note": ""}]}, {"emoji": "\ud83d\udc5f", "title": "Footwear", "items": [{"label": "Flip flops / sandals", "note": ""}, {"label": "Sneakers or walking shoes", "note": ""}, {"label": "Water shoes", "note": "beaches & springs"}]}, {"emoji": "\ud83e\uddf4", "title": "Toiletries & Health", "items": [{"label": "Sunscreen SPF 50+", "note": "lots of it!"}, {"label": "After-sun lotion / aloe", "note": ""}, {"label": "Insect repellent", "note": "must-have"}, {"label": "Shampoo & conditioner", "note": ""}, {"label": "Body wash", "note": ""}, {"label": "Deodorant", "note": ""}, {"label": "Toothbrush & toothpaste", "note": ""}, {"label": "Lip balm with SPF", "note": ""}, {"label": "Pain reliever", "note": ""}, {"label": "Band-aids / first aid", "note": ""}, {"label": "Any prescription meds", "note": "essential"}]}, {"emoji": "\ud83c\udfd6\ufe0f", "title": "Beach & Outdoors", "items": [{"label": "Beach towel", "note": "x2"}, {"label": "Beach bag", "note": ""}, {"label": "Waterproof phone pouch", "note": ""}, {"label": "Reusable water bottle", "note": "stay hydrated!"}, {"label": "Small cooler / insulated bag", "note": ""}]}, {"emoji": "\ud83c\udf92", "title": "Backpack / Day Bag", "items": [{"label": "Small backpack or tote", "note": ""}, {"label": "Snacks for the car", "note": ""}, {"label": "Headphones or earbuds", "note": ""}, {"label": "Phone + charger", "note": ""}, {"label": "Portable power bank", "note": ""}]}, {"emoji": "\ud83d\udccb", "title": "Documents & Money", "items": [{"label": "Driver's license / ID", "note": "essential"}, {"label": "Health insurance card", "note": ""}, {"label": "Credit & debit cards", "note": ""}, {"label": "Cash + coins (tolls)", "note": "FL toll roads"}, {"label": "Hotel / Airbnb confirmations", "note": ""}, {"label": "SunPass or toll transponder", "note": ""}, {"label": "Car insurance & registration", "note": "essential"}]}, {"emoji": "\ud83e\uddf3", "title": "Dad Essentials", "items": [{"label": "Reading glasses", "note": ""}, {"label": "Book or Kindle", "note": ""}, {"label": "Comfortable driving shoes", "note": ""}, {"label": "Roadside emergency kit", "note": ""}, {"label": "Snacks stash (the dad stash)", "note": ""}, {"label": "Multi-port USB charger", "note": ""}, {"label": "Zip-lock bags (always useful)", "note": "x5"}]}, {"emoji": "\ud83d\ude97", "title": "Road Trip Gear", "items": [{"label": "Car phone mount / GPS", "note": ""}, {"label": "Car charger / USB-C adapter", "note": ""}, {"label": "Paper towels / wet wipes", "note": ""}, {"label": "Trash bags", "note": ""}, {"label": "Roadside emergency kit", "note": ""}]}];
+let S={cats:null,checked:{}};
+function load(){try{const s=localStorage.getItem(SK);if(s)S=JSON.parse(s);else S.cats=JSON.parse(JSON.stringify(DD));}catch(e){S={cats:JSON.parse(JSON.stringify(DD)),checked:{}};}};
+function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}};
+function render(){
+  const C=document.getElementById('lists');
+  const open={};document.querySelectorAll('.category').forEach((el,i)=>open[i]=el.classList.contains('open'));
+  C.innerHTML='';
+  let tot=0,dn=0;
+  S.cats.forEach((c,ci)=>{tot+=c.items.length;dn+=c.items.filter((_,ii)=>S.checked[ci+'-'+ii]).length;});
+  document.getElementById('db').style.display=(dn===tot&&tot>0)?'block':'none';
+  document.getElementById('pt').textContent=dn+' of '+tot;
+  document.getElementById('pf').style.width=tot?Math.round(dn/tot*100)+'%':'0%';
+  S.cats.forEach((cat,ci)=>{
+    const cc=cat.items.filter((_,ii)=>S.checked[ci+'-'+ii]).length;
+    const isOpen=(ci in open)?open[ci]:(ci===0);
+    const d=document.createElement('div');
+    d.className='category'+(isOpen?' open':'');
+    const iH=cat.items.map((item,ii)=>{
+      const k=ci+'-'+ii,chk=!!S.checked[k];
+      return '<div class="item'+(chk?' checked':'')+'"><div class="checkbox" onclick="tog('+ci+','+ii+')">'+(chk?'✓':'')+'</div><span class="item-label" onclick="tog('+ci+','+ii+')">'+item.label+'</span>'+(item.note?'<span class="item-note">'+item.note+'</span>':'')+'<button class="del-btn" onclick="del('+ci+','+ii+')" title="Remove">✕</button></div>';
+    }).join('');
+    d.innerHTML='<div class="cat-header" onclick="toggleCat('+ci+')"><span class="cat-emoji">'+cat.emoji+'</span><span class="cat-title">'+cat.title+'</span><span class="cat-count">'+cc+'/'+cat.items.length+'</span><span class="cat-toggle">▼</span></div><div class="cat-items">'+iH+'<div class="add-row"><input class="add-input" type="text" placeholder="Add an item..." id="al'+ci+'" onkeydown="if(event.key===\'Enter\')add('+ci+')"><span class="qty-label">Qty:</span><input class="qty-input" type="number" min="1" placeholder="1" id="aq'+ci+'" onkeydown="if(event.key===\'Enter\')add('+ci+')"><button class="add-btn" onclick="add('+ci+')">+ Add</button></div></div>';
+    C.appendChild(d);
+  });
+};
+function toggleCat(ci){const els=document.querySelectorAll('.category');if(els[ci])els[ci].classList.toggle('open');}
+function tog(ci,ii){const k=ci+'-'+ii;S.checked[k]=!S.checked[k];save();render();}
+function del(ci,ii){
+  S.cats[ci].items.splice(ii,1);
+  const nc={};
+  Object.entries(S.checked).forEach(([k,v])=>{const[c,i]=[...k.split('-').map(Number)];if(c!==ci){nc[k]=v;return;}if(i<ii)nc[k]=v;else if(i>ii)nc[c+'-'+(i-1)]=v;});
+  S.checked=nc;save();render();
+}
+function add(ci){
+  const lEl=document.getElementById('al'+ci),qEl=document.getElementById('aq'+ci);
+  const label=lEl.value.trim();if(!label){lEl.focus();return;}
+  const qty=parseInt(qEl.value)||1;
+  S.cats[ci].items.push({label,note:qty>1?'×'+qty:''});
+  save();render();
+  setTimeout(()=>{const el=document.getElementById('al'+ci);if(el)el.focus();},50);
+}
+function expandAll(){document.querySelectorAll('.category').forEach(c=>c.classList.add('open'));}
+function collapseAll(){document.querySelectorAll('.category').forEach(c=>c.classList.remove('open'));}
+function resetAll(){if(confirm('Reset all checkmarks and restore default items for Damian?')){S={cats:JSON.parse(JSON.stringify(DD)),checked:{}};save();render();}}
+load();render();
+</script>
+</body>
+</html>
