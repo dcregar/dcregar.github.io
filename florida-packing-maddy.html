@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maddy's Florida Packing List</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #FF6B9D;
+    --bg: #FFF0F7;
+    --text: #1A1A2E;
+    --muted: #888;
+    --card: #ffffff;
+    --sand: #FFF0F7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .header {
+    background: linear-gradient(135deg, #FF6B9D 0%, #C2185B 100%);
+    padding: 44px 24px 72px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 48px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .kid-emoji {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+    animation: bob 3s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .header h1 {
+    font-family: 'Fredoka One', serif;
+    font-size: clamp(30px, 9vw, 52px);
+    font-weight: 900;
+    color: #fff;
+    position: relative; z-index: 1;
+    line-height: 1.1;
+  }
+  .header .tagline {
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+    margin-top: 6px;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+  .progress-wrap {
+    max-width: 560px;
+    margin: 22px auto 0;
+    padding: 0 24px;
+    position: relative; z-index: 1;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: rgba(255,255,255,0.9);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .content {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 24px 16px 0;
+  }
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .btn {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-outline { background: #fff; color: var(--text); border: 1.5px solid #E0E0E0; }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .category {
+    background: var(--card);
+    border-radius: 18px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+    border-left: 4px solid var(--accent);
+  }
+  .category:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.10); }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 18px;
+    cursor: pointer;
+    user-select: none;
+    gap: 11px;
+  }
+  .cat-emoji { font-size: 22px; flex-shrink: 0; }
+  .cat-title {
+    font-family: 'Fredoka One', serif;
+    font-size: 17px;
+    font-weight: 700;
+    flex: 1;
+  }
+  .cat-count {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 99px;
+    background: var(--bg);
+    color: var(--muted);
+  }
+  .cat-toggle { font-size: 14px; color: var(--muted); transition: transform 0.25s; }
+  .category.open .cat-toggle { transform: rotate(180deg); }
+  .cat-items { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+  .category.open .cat-items { max-height: 1000px; }
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 11px 18px 11px 14px;
+    gap: 11px;
+    border-top: 1px solid #F2F2F2;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .item:hover { background: #FAFAFA; }
+  .item.checked { opacity: 0.45; }
+  .item.checked .item-label { text-decoration: line-through; color: var(--muted); }
+  .checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid #DDD;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 13px;
+    color: #fff;
+  }
+  .item.checked .checkbox { background: var(--accent); border-color: var(--accent); }
+  .item-label { font-size: 14px; flex: 1; }
+  .item-note {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 99px;
+    background: var(--bg);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .done-banner {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: var(--card);
+    border-radius: 18px;
+    margin-bottom: 16px;
+    border: 2px dashed var(--accent);
+    font-family: 'Fredoka One', serif;
+    font-size: 22px;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="kid-emoji">🌺</span>
+  <h1>Maddy's Packing List</h1>
+  <p class="tagline">Your Florida Adventure Checklist!</p>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>All packed up ✈️</span>
+      <span id="progress-text">0 of 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="done-banner" id="done-banner">🎉 You're all packed, Maddy! Let's go to Florida!</div>
+  <div class="controls">
+    <button class="btn btn-outline" onclick="expandAll()">Expand All</button>
+    <button class="btn btn-outline" onclick="collapseAll()">Collapse All</button>
+    <button class="btn btn-accent" onclick="resetAll()">Reset</button>
+  </div>
+  <div id="lists"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'florida_packing_maddy';
+const data = [{"emoji": "\ud83d\udc57", "title": "Clothing", "color": "sun", "items": [{"label": "T-shirts / tank tops", "note": "\u00d77"}, {"label": "Shorts", "note": "\u00d74"}, {"label": "Swimsuit", "note": "\u00d72"}, {"label": "Lightweight pants or jeans", "note": "\u00d71"}, {"label": "Underwear", "note": "\u00d78"}, {"label": "Socks (light / no-show)", "note": "\u00d75"}, {"label": "Pajamas", "note": ""}, {"label": "Light hoodie or cardigan", "note": "AC is cold!"}, {"label": "Rain jacket or poncho", "note": "Florida showers"}, {"label": "Sun hat or baseball cap", "note": ""}, {"label": "Sunglasses", "note": ""}]}, {"emoji": "\ud83d\udc5f", "title": "Footwear", "color": "coral", "items": [{"label": "Flip flops / sandals", "note": ""}, {"label": "Sneakers or walking shoes", "note": ""}, {"label": "Water shoes", "note": "beaches & springs"}]}, {"emoji": "\ud83e\uddf4", "title": "Toiletries & Health", "color": "ocean", "items": [{"label": "Sunscreen SPF 50+", "note": "lots of it!"}, {"label": "After-sun lotion / aloe", "note": ""}, {"label": "Insect repellent", "note": "must-have"}, {"label": "Shampoo & conditioner", "note": ""}, {"label": "Body wash", "note": ""}, {"label": "Deodorant", "note": ""}, {"label": "Toothbrush & toothpaste", "note": ""}, {"label": "Lip balm with SPF", "note": ""}, {"label": "Pain reliever", "note": ""}, {"label": "Band-aids / first aid", "note": ""}, {"label": "Any prescription meds", "note": "\u26a0 essential"}]}, {"emoji": "\ud83c\udfd6\ufe0f", "title": "Beach & Outdoors", "color": "palm", "items": [{"label": "Beach towel", "note": "\u00d72"}, {"label": "Beach bag", "note": ""}, {"label": "Waterproof phone pouch", "note": ""}, {"label": "Reusable water bottle", "note": "stay hydrated!"}]}, {"emoji": "\ud83c\udf92", "title": "Backpack / Day Bag", "color": "purple", "items": [{"label": "Small backpack or tote", "note": ""}, {"label": "Snacks for the car", "note": "\ud83c\udf7f"}, {"label": "Headphones or earbuds", "note": ""}, {"label": "Phone + charger", "note": ""}, {"label": "Portable power bank", "note": ""}, {"label": "Book, tablet, or e-reader", "note": ""}]}, {"emoji": "\ud83c\udfa8", "title": "Maddy's Fun Stuff", "color": "pink", "items": [{"label": "Coloring book or activity book", "note": ""}, {"label": "Favorite stuffed animal or toy", "note": ""}, {"label": "Camera or disposable camera", "note": ""}, {"label": "Journal or diary", "note": ""}, {"label": "Card games (Uno, Go Fish...)", "note": ""}]}, {"emoji": "\ud83d\udccb", "title": "Don't Forget", "color": "navy", "items": [{"label": "ID or passport", "note": "\u26a0 essential"}, {"label": "Health insurance card", "note": ""}, {"label": "Any special gear or hobby items", "note": ""}]}];
+
+let checked = {};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) checked = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); } catch(e) {}
+}
+
+function render() {
+  const container = document.getElementById('lists');
+  container.innerHTML = '';
+  const total = data.reduce((s, c) => s + c.items.length, 0);
+  const done = Object.values(checked).filter(Boolean).length;
+
+  document.getElementById('done-banner').style.display = done === total && total > 0 ? 'block' : 'none';
+
+  data.forEach((cat, ci) => {
+    const div = document.createElement('div');
+    const checkedCount = cat.items.filter((_, ii) => checked[`${ci}-${ii}`]).length;
+    div.className = 'category' + (ci === 0 ? ' open' : '');
+    div.innerHTML = `
+      <div class="cat-header" onclick="this.parentElement.classList.toggle('open');this.querySelector('.cat-toggle').style.transform=this.parentElement.classList.contains('open')?'rotate(180deg)':''">
+        <span class="cat-emoji">${cat.emoji}</span>
+        <span class="cat-title">${cat.title}</span>
+        <span class="cat-count">${checkedCount}/${cat.items.length}</span>
+        <span class="cat-toggle">▼</span>
+      </div>
+      <div class="cat-items">
+        ${cat.items.map((item, ii) => `
+          <div class="item ${checked[`${ci}-${ii}`] ? 'checked' : ''}" onclick="toggle(${ci},${ii})">
+            <div class="checkbox">${checked[`${ci}-${ii}`] ? '✓' : ''}</div>
+            <span class="item-label">${item.label}</span>
+            ${item.note ? `<span class="item-note">${item.note}</span>` : ''}
+          </div>
+        `).join('')}
+      </div>`;
+    container.appendChild(div);
+  });
+
+  document.getElementById('progress-text').textContent = `${done} of ${total}`;
+  document.getElementById('progress-fill').style.width = total ? `${(done/total)*100}%` : '0%';
+}
+
+function toggle(ci, ii) {
+  const k = `${ci}-${ii}`;
+  checked[k] = !checked[k];
+  saveState(); render();
+}
+
+function expandAll() { document.querySelectorAll('.category').forEach(c => c.classList.add('open')); }
+function collapseAll() { document.querySelectorAll('.category').forEach(c => c.classList.remove('open')); }
+function resetAll() { if(confirm('Reset all checkmarks for Maddy?')) { checked={}; saveState(); render(); } }
+
+loadState();
+render();
+</script>
+</body>
+</html>
